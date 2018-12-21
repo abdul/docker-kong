@@ -10,7 +10,9 @@ if [[ "$1" == "kong" ]]; then
     chown kong "$PREFIX"
     su-exec kong kong prepare -p "$PREFIX"
     
-    setcap cap_net_raw=+ep /usr/local/openresty/nginx/sbin/nginx
+    if [ ! -z ${KONG_STREAM_LISTEN+x} ]; then
+      setcap cap_net_raw=+ep /usr/local/openresty/nginx/sbin/nginx
+    fi
 
     chmod 777 /proc/self/fd/1
     chmod 777 /proc/self/fd/2
